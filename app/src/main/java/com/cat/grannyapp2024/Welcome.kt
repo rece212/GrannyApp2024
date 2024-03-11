@@ -9,6 +9,10 @@ import android.os.Looper
 import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
+import java.net.URL
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
@@ -44,12 +48,30 @@ class Welcome : AppCompatActivity() {
 
         }
 
+       val feed :RecyclerView = findViewById(R.id.recyclerView)
+        var userAdapter :UserAdapter
+        userAdapter= UserAdapter()
+        feed.apply {
+            layoutManager=LinearLayoutManager(this@Welcome)
+            adapter=userAdapter
+        }
 
 
 
 
+        val executor2 = Executors.newSingleThreadExecutor()
+        executor2.execute {
+            //Fetch data from the URL and parse it into a list of User Objects
+            val url = URL("https://opsc.azurewebsites.net/?userdb")
+            val json = url.readText()
+
+            val userList= Gson().fromJson(json,Array<User>::class.java).toList()
+            Handler(Looper.getMainLooper()).post{
+                userAdapter.submitList(userList)
+            }
 
 
+        }
 
 
     }
