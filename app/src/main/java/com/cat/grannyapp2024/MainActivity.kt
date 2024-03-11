@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 var arrUser=ArrayList<User>()
+var Signedin :Int = -1
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         btnLogin.setOnClickListener()
         {
             var Found = false
-
+            Signedin =-1
             for (i in 0..arrUser.size-1)
             {
                 if(Username.text.toString().equals(arrUser[i].Name)
@@ -38,7 +39,7 @@ class MainActivity : AppCompatActivity() {
                     Found=true
                     val intent = Intent(this,Welcome::class.java)
                     startActivity(intent)
-
+                    Signedin=i
                     break;
                 }
 

@@ -8,6 +8,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.widget.ImageView
+import android.widget.TextView
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
@@ -15,12 +16,14 @@ class Welcome : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_welcome)
+        var Welcome : TextView = findViewById(R.id.txtWelcome)
+        Welcome.setText(arrUser[Signedin].Name.toString())
         var image: Bitmap? = null
         val imOutput :ImageView = findViewById(R.id.imWelcome)
         val handler = Handler(Looper.getMainLooper())
         val executor = Executors.newSingleThreadExecutor()
         executor.execute{
-            val imageURL ="https://picsum.photos/200/300"
+            val imageURL = arrUser[Signedin].imageURL
             try
             {
                 val `in` = java.net.URL(imageURL).openStream()
