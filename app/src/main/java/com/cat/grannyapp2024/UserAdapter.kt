@@ -35,12 +35,39 @@ class UserAdapter :ListAdapter<User,UserAdapter.UserAdapter>(UserViewHolder())
         val user = getItem(position)
         holder.itemView.findViewById<TextView>(R.id.txtNameUser).text = user.Name
         holder.itemView.findViewById<TextView>(R.id.txtPasswordUser).text = user.Password
+        //Declaring executor to parse the url
+        val executor = Executors.newSingleThreadExecutor()
+        val handler = Handler(Looper.getMainLooper())
+        //Setting up the image
+        var image: Bitmap?=null
+        val imageView = holder.itemView.findViewById<ImageView>(R.id.imPP)
+        executor.execute {
+            val imageURL = user.imageURL
 
-
-
-
-
-
+            try {
+                val `in` = java.net.URL(imageURL).openStream()
+                image = BitmapFactory.decodeStream(`in`)
+                Log.d("AddednewUser","Image in text "+imageURL.toString())
+                handler.post {
+                    Log.d("AddedNewUser","Image Added")
+                    imageView.setImageBitmap(image)
+                }
+            }
+            catch (e:java.lang.Exception)
+            {
+                Log.d("AddNewUser","Error happened ..."+e.toString())
+                e.printStackTrace()
+            }
+        }
+    }
+}
+class UserViewHolder :DiffUtil.ItemCallback<User>()
+{
+    override fun areItemsTheSame(oldItem: User, newItem: User): Boolean {
+        return oldItem.Name == newItem.Name
     }
 
+    override fun areContentsTheSame(oldItem: User, newItem: User): Boolean {
+        return areItemsTheSame(oldItem,newItem)
+    }
 }
